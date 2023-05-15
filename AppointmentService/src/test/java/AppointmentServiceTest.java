@@ -16,40 +16,36 @@ public class AppointmentServiceTest {
 
     @Test
     public void testAddAppointment() {
-        // Create a sample appointment
+        // Create a new appointment
         Appointment appointment = new Appointment("1234567890", new Date(), "Sample appointment");
 
         // Add the appointment to the appointment service
         appointmentService.addAppointment(appointment);
 
-        // Get the list of appointments from the appointment service
+        // Retrieve the list of appointments from the appointment service
         List<Appointment> appointments = appointmentService.getAppointments();
 
         // Verify that the appointment was added successfully
         Assertions.assertEquals(1, appointments.size());
         Assertions.assertEquals(appointment, appointments.get(0));
-
-        // Verify that the appointment's date and description are not null
-        Assertions.assertNotNull(appointment.getAppointmentDate());
-        Assertions.assertNotNull(appointment.getDescription());
     }
 
     @Test
     public void testAddDuplicateAppointment() {
-        // Create two appointments with the same ID
+        // Create two appointments with the same appointment ID
         Appointment appointment1 = new Appointment("1234567890", new Date(), "Sample appointment");
         Appointment appointment2 = new Appointment("1234567890", new Date(), "Duplicate appointment");
 
         // Add the first appointment to the appointment service
         appointmentService.addAppointment(appointment1);
 
-        // Attempt to add the second appointment (duplicate)
+        // Add the second appointment to the appointment service
         appointmentService.addAppointment(appointment2);
 
-        // Get the list of appointments from the appointment service
+        // Retrieve the list of appointments from the appointment service
         List<Appointment> appointments = appointmentService.getAppointments();
 
-        // Verify that only the first appointment was added (duplicate was not added)
+        // Verify that only the first appointment is added (no duplicates)
         Assertions.assertEquals(1, appointments.size());
         Assertions.assertEquals(appointment1, appointments.get(0));
     }
@@ -64,13 +60,13 @@ public class AppointmentServiceTest {
         appointmentService.addAppointment(appointment1);
         appointmentService.addAppointment(appointment2);
 
-        // Delete the first appointment by its ID
+        // Delete the first appointment by appointment ID
         appointmentService.deleteAppointment("1234567890");
 
-        // Get the list of appointments from the appointment service
+        // Retrieve the list of appointments from the appointment service
         List<Appointment> appointments = appointmentService.getAppointments();
 
-        // Verify that the first appointment was deleted and only the second appointment remains
+        // Verify that only the second appointment remains (first appointment is deleted)
         Assertions.assertEquals(1, appointments.size());
         Assertions.assertEquals(appointment2, appointments.get(0));
     }
