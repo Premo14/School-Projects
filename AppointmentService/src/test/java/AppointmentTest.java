@@ -1,73 +1,40 @@
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
-import java.util.List;
 
 public class AppointmentTest {
-    private AppointmentService appointmentService;
 
-    @BeforeEach
-    public void setUp() {
-        // Create a new instance of AppointmentService before each test
-        appointmentService = new AppointmentService();
+    @Test
+    public void testValidAppointment() {
+        // Create a valid appointment
+        String appointmentId = "1234567890";
+        Date appointmentDate = new Date();  // Use the current date as the appointment date
+        String description = "Sample appointment";
+
+        // Create an instance of the Appointment class
+        Appointment appointment = new Appointment(appointmentId, appointmentDate, description);
+
+        // Verify that the appointment ID, appointment date, and description are set correctly
+        Assertions.assertEquals(appointmentId, appointment.getAppointmentId());
+        Assertions.assertEquals(appointmentDate, appointment.getAppointmentDate());
+        Assertions.assertEquals(description, appointment.getDescription());
     }
 
     @Test
-    public void testAddAppointment() {
-        // Create a sample appointment
-        Appointment appointment = new Appointment("1234567890", new Date(), "Sample appointment");
+    public void testInvalidDescription() {
+        // Try to create an appointment with a null description
+        String appointmentId = "1234567890";
+        Date appointmentDate = new Date();  // Use the current date as the appointment date
+        final String nullDescription = null;
 
-        // Add the appointment to the appointment service
-        appointmentService.addAppointment(appointment);
+        // Verify that creating an appointment with a null description throws an IllegalArgumentException
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Appointment(appointmentId, appointmentDate, nullDescription));
 
-        // Get the list of appointments from the appointment service
-        List<Appointment> appointments = appointmentService.getAppointments();
+        // Try to create an appointment with a description exceeding the maximum length
+        final String longDescription = "This is a very long appointment description that exceeds the maximum length allowed.";
 
-        // Verify that the appointment was added successfully
-        Assertions.assertEquals(1, appointments.size());
-        Assertions.assertEquals(appointment, appointments.get(0));
-    }
-
-    @Test
-    public void testAddDuplicateAppointment() {
-        // Create two appointments with the same ID
-        Appointment appointment1 = new Appointment("1234567890", new Date(), "Sample appointment");
-        Appointment appointment2 = new Appointment("1234567890", new Date(), "Duplicate appointment");
-
-        // Add the first appointment to the appointment service
-        appointmentService.addAppointment(appointment1);
-
-        // Attempt to add the second appointment (duplicate)
-        appointmentService.addAppointment(appointment2);
-
-        // Get the list of appointments from the appointment service
-        List<Appointment> appointments = appointmentService.getAppointments();
-
-        // Verify that only the first appointment was added (duplicate was not added)
-        Assertions.assertEquals(1, appointments.size());
-        Assertions.assertEquals(appointment1, appointments.get(0));
-    }
-
-    @Test
-    public void testDeleteAppointment() {
-        // Create two appointments
-        Appointment appointment1 = new Appointment("1234567890", new Date(), "Sample appointment");
-        Appointment appointment2 = new Appointment("0987654321", new Date(), "Another appointment");
-
-        // Add both appointments to the appointment service
-        appointmentService.addAppointment(appointment1);
-        appointmentService.addAppointment(appointment2);
-
-        // Delete the first appointment by its ID
-        appointmentService.deleteAppointment("1234567890");
-
-        // Get the list of appointments from the appointment service
-        List<Appointment> appointments = appointmentService.getAppointments();
-
-        // Verify that the first appointment was deleted and only the second appointment remains
-        Assertions.assertEquals(1, appointments.size());
-        Assertions.assertEquals(appointment2, appointments.get(0));
+        // Verify that creating an appointment with an invalid description throws an IllegalArgumentException
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Appointment(appointmentId, appointmentDate, longDescription));
     }
 }
